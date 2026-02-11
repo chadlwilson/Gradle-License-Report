@@ -15,7 +15,7 @@
  */
 package com.github.jk1.license.util
 
-import org.gradle.api.Project
+import com.github.jk1.license.GradleProject
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.maven.MavenModule
@@ -25,9 +25,9 @@ class CachingPomResolver {
 
     private static Logger LOGGER = Logging.getLogger(CachingPomResolver.class)
     private Map<Map<String, String>, Collection<File>> cache = new HashMap<>()
-    private Project project
+    private GradleProject project
 
-    CachingPomResolver(Project project) {
+    CachingPomResolver(GradleProject project) {
         this.project = project
     }
 

@@ -19,7 +19,7 @@ import groovy.json.StringEscapeUtils
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import spock.lang.Ignore
+import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -680,7 +680,7 @@ class CheckLicenseTaskSpec extends Specification {
         buildResult.task(":checkLicense").outcome == TaskOutcome.UP_TO_DATE
     }
 
-    @Ignore // https://github.com/jk1/Gradle-License-Report/issues/255
+    @PendingFeature(reason = "configuration cache not yet supported correctly due to https://github.com/jk1/Gradle-License-Report/issues/255")
     def "using it with configuration cache should not cause the build to fail"() {
         given:
         buildFile << """
@@ -694,6 +694,24 @@ class CheckLicenseTaskSpec extends Specification {
         """
         when:
         BuildResult buildResult = result("--configuration-cache", "checkLicense")
+
+        then:
+        buildResult.task(":checkLicense").outcome == TaskOutcome.SUCCESS
+    }
+
+    def "loading allowed licenses from remote URI TextResource should be possible"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'com.github.jk1.dependency-license-report'
+            }
+            
+            licenseReport {
+                allowedLicensesFile = resources.text.fromUri("https://raw.githubusercontent.com/jk1/Gradle-License-Report/9e95aa2d2c78e40cacaf533d72657e420ad67684/src/test/resources/empty-allowed-licenses.json")
+            }
+        """
+        when:
+        BuildResult buildResult = result("checkLicense")
 
         then:
         buildResult.task(":checkLicense").outcome == TaskOutcome.SUCCESS

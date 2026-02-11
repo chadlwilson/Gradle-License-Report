@@ -56,6 +56,10 @@ licenseReport {
     // Defaults to current project and all its subprojects
     projects = [project] + project.subprojects
 
+    // Select projects to examine their buildScripts / plugins for dependencies.
+    // Defaults to nothing. Could be configured like [project] + project.subprojects
+    buildScriptProjects = []
+
     // Adjust the configurations to fetch dependencies. Default is 'runtimeClasspath'
     // For Android projects use 'releaseRuntimeClasspath' or 'yourFlavorNameReleaseRuntimeClasspath'
     // Use 'ALL' to dynamically resolve all configurations:
@@ -468,10 +472,10 @@ licenseReport {
 }
 ```
 
-or
+or from a remote resource
 
 ```groovy
 licenseReport {
-    allowedLicensesFile = new URL('http://company.com/licenses/allowed-licenses.json')
+    allowedLicensesFile = resources.text.fromUri('https://company.com/licenses/allowed-licenses.json')
 }
 ```
