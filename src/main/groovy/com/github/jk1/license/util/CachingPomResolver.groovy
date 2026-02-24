@@ -40,7 +40,7 @@ class CachingPomResolver {
         return cache.get(copy)
     }
 
-    private Collection<File> doResolveArtifact(Object spec) {
+    private Collection<File> doResolveArtifact(Map<String, String> spec) {
         try {
             return project
                   .dependencies
